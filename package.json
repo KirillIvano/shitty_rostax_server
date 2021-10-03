@@ -1,0 +1,39 @@
+{
+  "name": "rostax-serv",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -e \"tsx,ts\" -x \"ts-node --transpile-only ./src/index.ts\""
+  },
+  "author": "",
+  "license": "ISC",
+  "_moduleAliases": {
+    "~": "src"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.1.1",
+    "dotenv": "^10.0.0",
+    "fastify": "^3.21.6",
+    "fastify-cookie": "^5.3.1",
+    "fastify-cors": "^6.0.2",
+    "fastify-multipart": "^5.0.1",
+    "joi": "^17.4.2",
+    "module-alias": "^2.2.2",
+    "ramda": "^0.27.1"
+  },
+  "devDependencies": {
+    "@types/busboy": "^0.2.4",
+    "@types/node": "^16.10.1",
+    "@types/ramda": "^0.27.45",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.13",
+    "prettier": "^2.4.1",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}
