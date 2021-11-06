@@ -1,19 +1,22 @@
+import {PrismaClient} from '@prisma/client';
 import {FastifyInstance} from 'fastify';
+import {createAuthMiddleware} from '~/middleware/auth';
 
-import {PASSWORD} from '~/settings';
+import {PASSWORD_HASH, SESSION_TTL} from '~/settings';
+import {generateHash} from '~/utils/generateHash';
+import {getPasswordHash} from '~/utils/getPasswordHash';
+import {optionalPromise} from '~/utils/optional';
 
-const passwordHash = 'k3k';
+export const generateAuthenticatedAdminRoutes = (app: FastifyInstance, db: PrismaClient): void => {
+    const authMid = createAuthMiddleware(db);
+    app.addHook('preValidation', authMid);
 
-export const generateAdminRoutes = (app: FastifyInstance): void => {
-    app.get('/ping', (req, res) => {
-        if (req.cookies['pass'] === passwordHash) {
-            res.status(200).send('pong');
-            return;
-        }
-
-        res.status(401).send('error');
+    app.get('/ping', async (_, res) => {
+        return res.status(200).send({data: 'pong'});
     });
+};
 
+export const generateAdminRoutes = (app: FastifyInstance, db: PrismaClient): void => {
     app.post<{Body: {password: string | undefined}}>('/login', async (req, res) => {
         const {password} = req.body;
 
@@ -22,11 +25,18 @@ export const generateAdminRoutes = (app: FastifyInstance): void => {
             return {error: 'no password'};
         }
 
-        if (password === PASSWORD) {
-            res.status(200);
-            res.setCookie('pass', PASSWORD, {httpOnly: true});
+        if (getPasswordHash(password) === PASSWORD_HASH) {
+            const hash = generateHash();
 
-            return {data: 'ok'};
+            const sessionRes = await optionalPromise(db.session.create({data: {hash}}));
+            if (sessionRes.err !== null) return res.status(500).send({error: 'Ошибка при создании сессии'});
+
+            res.status(200).setCookie('pass', `${sessionRes.val.id}_${sessionRes.val.hash}`, {
+                httpOnly: true,
+                maxAge: SESSION_TTL / 1000,
+            });
+
+            return {data: res.cookie};
         }
 
         res.status(400);

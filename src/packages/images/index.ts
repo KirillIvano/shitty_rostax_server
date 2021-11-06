@@ -1,26 +1,35 @@
-import {FastifyInstance} from 'fastify';
+import type {PrismaClient} from '@prisma/client';
+import type {FastifyInstance} from 'fastify';
+
+import {createAuthMiddleware} from '~/middleware/auth';
 import {assertExists} from '~/utils/assertions';
+
 import {imagesRegistry} from './registry';
 
-export const generateImagesRoutes = (app: FastifyInstance): void => {
-    app.post('/image', async (req, res) => {
-        const file = await req.file().catch(() => null);
+export const generateImagesRoutes = (app: FastifyInstance, db: PrismaClient): void => {
+    app.register(async localApp => {
+        const auth = createAuthMiddleware(db);
+        localApp.addHook('preValidation', auth);
 
-        if (!file) {
-            return res.status(400).send({error: 'В запросе нет файла'});
-        }
+        app.post('/image', async (req, res) => {
+            const file = await req.file().catch(() => null);
 
-        const generatedName = await imagesRegistry.saveImage(file);
+            if (!file) {
+                return res.status(400).send({error: 'В запросе нет файла'});
+            }
 
-        res.status(200).send({data: {fileName: generatedName}});
-    });
+            const generatedName = await imagesRegistry.saveImage(file);
 
-    app.delete<{Body: {fileName?: string}}>('/image', async (req, res) => {
-        const {fileName} = req.body;
-        assertExists(fileName);
+            res.status(200).send({data: {fileName: generatedName}});
+        });
 
-        await imagesRegistry.deleteImage(fileName);
+        app.delete<{Body: {fileName?: string}}>('/image', async (req, res) => {
+            const {fileName} = req.body;
+            assertExists(fileName);
 
-        res.status(200).send({data: {ok: true}});
+            await imagesRegistry.deleteImage(fileName);
+
+            res.status(200).send({data: {ok: true}});
+        });
     });
 };

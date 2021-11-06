@@ -12,7 +12,7 @@ model Category {
 }
 
 model Product {
-    id               Int      @id @default(autoincrement())
+    id               Int    @id @default(autoincrement())
     name             String
     shortDescription String
     image            String
@@ -20,8 +20,14 @@ model Product {
     price            Int?
     certificate      String
 
-    category         Category @relation(fields: [categoryId], references: [id])
-    categoryId       Int
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId Int
+}
+
+model Session {
+    id        Int      @id @default(autoincrement())
+    timestamp DateTime @default(now())
+    hash      String
 }
 
 generator client {

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -e \"tsx,ts\" -x \"ts-node --transpile-only ./src/index.ts\""
+    "dev": "nodemon -e \"tsx,ts\" -x \"ts-node --transpile-only ./src/index.ts\"",
+    "migrate-db": "npx prisma migrate dev --name init --schema ./prisma/schema.prisma",
+    "update-db": "prisma generate"
   },
   "author": "",
   "license": "ISC",
@@ -12,15 +14,15 @@
     "~": "src"
   },
   "dependencies": {
-    "@prisma/client": "^3.1.1",
+    "@prisma/client": "^3.3.0",
     "dotenv": "^10.0.0",
     "fastify": "^3.21.6",
     "fastify-cookie": "^5.3.1",
     "fastify-cors": "^6.0.2",
     "fastify-multipart": "^5.0.1",
+    "fastify-static": "^4.4.2",
     "joi": "^17.4.2",
-    "module-alias": "^2.2.2",
-    "ramda": "^0.27.1"
+    "module-alias": "^2.2.2"
   },
   "devDependencies": {
     "@types/busboy": "^0.2.4",
@@ -33,6 +35,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "nodemon": "^2.0.13",
     "prettier": "^2.4.1",
+    "prisma": "^3.3.0",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
   }
