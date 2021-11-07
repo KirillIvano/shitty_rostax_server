@@ -5,7 +5,7 @@ import {createAuthMiddleware} from '~/middleware/auth';
 import {parseNumber} from '~/utils/assertions';
 
 import type {CategoryCreateDto} from './dto';
-import {validateCategoryCreateDto} from './validators';
+import {validateCategoryCreateDto, validateCategoryEditDto} from './validators';
 
 export type CategoryIdParams = {categoryid: string};
 
@@ -14,7 +14,7 @@ export const generateAuthorizedCategoriesRoutes = (app: FastifyInstance, db: Pri
         const auth = createAuthMiddleware(db);
         localApp.addHook('preValidation', auth);
 
-        app.delete<{Params: CategoryIdParams}>('/category/:categoryid', async req => {
+        localApp.delete<{Params: CategoryIdParams}>('/category/:categoryid', async req => {
             const {categoryid} = req.params;
             const parsedId = parseNumber(categoryid, 'Id категории невалиден');
 
@@ -23,7 +23,7 @@ export const generateAuthorizedCategoriesRoutes = (app: FastifyInstance, db: Pri
             return {data: {ok: true}};
         });
 
-        app.post<{Body: CategoryCreateDto}>('/category', async req => {
+        localApp.post<{Body: CategoryCreateDto}>('/category', async req => {
             const validated = validateCategoryCreateDto(req.body);
 
             const category = await db.category.create({data: validated});
@@ -31,10 +31,10 @@ export const generateAuthorizedCategoriesRoutes = (app: FastifyInstance, db: Pri
             return {data: {category}};
         });
 
-        app.post<{Params: CategoryIdParams; Body: CategoryCreateDto}>('/category/:categoryid', async req => {
+        localApp.post<{Params: CategoryIdParams; Body: CategoryCreateDto}>('/category/:categoryid', async req => {
             const {categoryid} = req.params;
             const parsedId = parseNumber(categoryid, 'Id категории невалиден');
-            const validated = validateCategoryCreateDto(req.body);
+            const validated = validateCategoryEditDto(req.body);
 
             await db.category.update({data: validated, where: {id: parsedId}});
 

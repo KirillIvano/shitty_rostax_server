@@ -8,12 +8,14 @@ import {getPasswordHash} from '~/utils/getPasswordHash';
 import {optionalPromise} from '~/utils/optional';
 
 export const generateAuthenticatedAdminRoutes = (app: FastifyInstance, db: PrismaClient): void => {
-    const authMid = createAuthMiddleware(db);
-    app.addHook('preValidation', authMid);
+    app.register(async localApp => {
+        const authMid = createAuthMiddleware(db);
+        localApp.addHook('preValidation', authMid);
 
-    app.get('/ping', async (_, res) => {
-        return res.status(200).send({data: 'pong'});
-    });
+        localApp.get('/ping', async (_, res) => {
+            return res.status(200).send({data: 'pong'});
+        });
+    })
 };
 
 export const generateAdminRoutes = (app: FastifyInstance, db: PrismaClient): void => {
