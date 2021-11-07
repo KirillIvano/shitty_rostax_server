@@ -45,7 +45,7 @@ export const generateAuthorizedProductRoutes = (app: FastifyInstance, db: Prisma
 
             if (!req.body.image) req.body.image = image;
             if (!req.body.certificate) req.body.certificate = certificate;
-            
+
             const validated = validateProductUpdateDto(req.body);
 
             const updatedProduct = await db.product.update({data: validated, where: {id: parsedId}});

@@ -15,7 +15,7 @@ export const generateAuthenticatedAdminRoutes = (app: FastifyInstance, db: Prism
         localApp.get('/ping', async (_, res) => {
             return res.status(200).send({data: 'pong'});
         });
-    })
+    });
 };
 
 export const generateAdminRoutes = (app: FastifyInstance, db: PrismaClient): void => {

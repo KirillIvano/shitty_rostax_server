@@ -55,4 +55,4 @@ generateAuthorizedProductRoutes(app, client);
 generateCategoriesRoutes(app, client);
 generateAuthorizedCategoriesRoutes(app, client);
 
-app.listen(3000, '0.0.0.0');
+app.listen(5000, '0.0.0.0');

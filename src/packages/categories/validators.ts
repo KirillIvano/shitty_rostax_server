@@ -10,8 +10,8 @@ const validateCategoryCreateSchema = Joi.object({
 });
 
 const validateCategoryEditSchema = Joi.object({
-    name: Joi.string().optional().empty(''),
-    image: Joi.string().optional().empty(''),
+    name: Joi.string().optional(),
+    image: Joi.string().optional(),
 });
 
 export const validateCategoryCreateDto = (dto: CategoryCreateDto): CategoryCreateDto => {

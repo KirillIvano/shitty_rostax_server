@@ -4,7 +4,7 @@ import {UnauthorizedError} from '~/errors/UnauthorizedError';
 import {SESSION_TTL} from '~/settings';
 
 export const createAuthMiddleware = (db: PrismaClient) => {
-    return async (req: FastifyRequest, _: FastifyReply, done: DoneFuncWithErrOrRes): Promise<void> => {
+    return async (req: FastifyRequest): Promise<void> => {
         const {pass} = req.cookies;
         if (!pass) throw new UnauthorizedError('Unauthorized, no pass in cookies');
 
@@ -15,7 +15,5 @@ export const createAuthMiddleware = (db: PrismaClient) => {
         if (session === null || session.hash !== hash) throw new UnauthorizedError('Unauthorized, pass is invalid');
         if (Date.now() - session.timestamp.valueOf() > SESSION_TTL)
             throw new UnauthorizedError('Unauthorized, pass is invalid');
-
-        done();
     };
 };
