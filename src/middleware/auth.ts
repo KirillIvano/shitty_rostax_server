@@ -1,5 +1,5 @@
 import type {PrismaClient} from '@prisma/client';
-import type {DoneFuncWithErrOrRes, FastifyRequest, FastifyReply} from 'fastify';
+import type {FastifyRequest} from 'fastify';
 import {UnauthorizedError} from '~/errors/UnauthorizedError';
 import {SESSION_TTL} from '~/settings';
 

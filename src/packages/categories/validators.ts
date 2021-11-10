@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 import {AssertionError} from '~/errors/AssertionError';
 
-import {CategoryCreateDto} from './dto';
+import {CategoryCreateDto, CategoryEditDto} from './dto';
 
 const validateCategoryCreateSchema = Joi.object({
     name: Joi.string().required(),
@@ -24,7 +24,7 @@ export const validateCategoryCreateDto = (dto: CategoryCreateDto): CategoryCreat
     return value;
 };
 
-export const validateCategoryEditDto = (dto: CategoryCreateDto): CategoryCreateDto => {
+export const validateCategoryEditDto = (dto: CategoryEditDto): CategoryEditDto => {
     const {value, error} = validateCategoryEditSchema.validate(dto);
 
     if (error) {

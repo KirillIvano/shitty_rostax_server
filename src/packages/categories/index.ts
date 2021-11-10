@@ -31,15 +31,27 @@ export const generateAuthorizedCategoriesRoutes = (app: FastifyInstance, db: Pri
             return {data: {category}};
         });
 
-        localApp.post<{Params: CategoryIdParams; Body: CategoryCreateDto}>('/category/:categoryid', async req => {
-            const {categoryid} = req.params;
-            const parsedId = parseNumber(categoryid, 'Id категории невалиден');
-            const validated = validateCategoryEditDto(req.body);
+        localApp.post<{Params: CategoryIdParams; Body: CategoryCreateDto}>(
+            '/category/:categoryid',
+            async (req, res) => {
+                const {categoryid} = req.params;
+                const parsedId = parseNumber(categoryid, 'Id категории невалиден');
 
-            await db.category.update({data: validated, where: {id: parsedId}});
+                const category = await db.category.findUnique({where: {id: parsedId}});
+                if (category === null) {
+                    return res.status(404);
+                }
 
-            return {data: {ok: true}};
-        });
+                const {image} = category;
+                if (!req.body.image) req.body.image = image;
+
+                const validated = validateCategoryEditDto(req.body);
+
+                await db.category.update({data: validated, where: {id: parsedId}});
+
+                return {data: {ok: true}};
+            },
+        );
     });
 };
 
