@@ -30,6 +30,20 @@ model Session {
     hash      String
 }
 
+model Object {
+    id          Int           @id @default(autoincrement())
+    name        String
+    ObjectImage ObjectImage[]
+}
+
+model ObjectImage {
+    id          Int    @id @default(autoincrement())
+    image       String
+
+    object      Object @relation(fields: [objectId], references: [id])
+    objectId    Int
+}
+
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }

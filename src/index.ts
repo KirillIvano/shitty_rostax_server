@@ -16,6 +16,8 @@ import {generateAdminRoutes, generateAuthenticatedAdminRoutes} from './packages/
 import {generateImagesRoutes} from './packages/images';
 import {generateAuthorizedProductRoutes, generateProductRoutes} from './packages/products';
 import {generateAuthorizedCategoriesRoutes, generateCategoriesRoutes} from './packages/categories';
+import {generateAuthorizedObjectsRoutes, generateObjectsRoutes} from './packages/objects';
+import {generateAuthorizedObjectImagesRoutes, generateObjectImagesRoutes} from './packages/objectsImage';
 import {CLIENT_URL} from '~/settings';
 
 const app = fastify({logger: true});
@@ -48,11 +50,20 @@ app.register(cors, {
 app.register(multipart);
 
 generateAdminRoutes(app, client);
-generateAuthenticatedAdminRoutes(app, client);
+
 generateImagesRoutes(app, client);
+generateAuthenticatedAdminRoutes(app, client);
+
 generateProductRoutes(app, client);
 generateAuthorizedProductRoutes(app, client);
+
 generateCategoriesRoutes(app, client);
 generateAuthorizedCategoriesRoutes(app, client);
+
+generateObjectsRoutes(app, client);
+generateAuthorizedObjectsRoutes(app, client);
+
+generateObjectImagesRoutes(app, client);
+generateAuthorizedObjectImagesRoutes(app, client);
 
 app.listen(5000, '0.0.0.0');
