@@ -4,46 +4,45 @@ datasource db {
     shadowDatabaseUrl = env("SHADOW_DATABASE_URl")
 }
 
-model Category {
-    id      Int       @id @default(autoincrement())
-    name    String
-    image   String
-    Product Product[]
+model category {
+    id       Int       @id(map: "PK_24dbc6126a28ff948da33e97d3b") @default(autoincrement())
+    name     String    @db.VarChar
+    image    String    @db.VarChar
+    products product[]
 }
 
-model Product {
-    id               Int    @id @default(autoincrement())
-    name             String
-    shortDescription String
-    image            String
-    description      String
+model product {
+    id               Int      @id(map: "PK_0806c755e0aca124e67c0cf6d7d") @default(autoincrement())
+    name             String   @db.VarChar
+    shortDescription String   @db.VarChar
+    image            String   @default("") @db.VarChar
+    description      String   @default("") @db.VarChar
     price            Int?
-    certificate      String
-
-    category   Category @relation(fields: [categoryId], references: [id])
-    categoryId Int
+    certificate      String   @default("") @db.VarChar
+    categoryId       Int
+    categories       category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_ff56834e735fa78a15d0cf21926")
 }
 
-model Session {
+model session {
     id        Int      @id @default(autoincrement())
     timestamp DateTime @default(now())
     hash      String
 }
 
-model Object {
+model object {
     id          Int           @id @default(autoincrement())
     name        String
-    ObjectImage ObjectImage[]
+    objectImage objectImage[]
 }
 
-model ObjectImage {
-    id          Int    @id @default(autoincrement())
-    image       String
+model objectImage {
+    id    Int    @id @default(autoincrement())
+    image String
 
-    object      Object @relation(fields: [objectId], references: [id])
-    objectId    Int
+    object   object @relation(fields: [objectId], references: [id])
+    objectId Int
 }
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }

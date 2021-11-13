@@ -18,12 +18,6 @@
     },
     "parser": "@typescript-eslint/parser",
     "rules": {
-        "prettier/prettier": [
-            "error",
-            {
-                "endOfLine": "auto"
-            }
-        ],
 
         // disable to work with prettier
         "arrow-body-style": "off",
