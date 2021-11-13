@@ -8,10 +8,10 @@ model categories {
   id       Int        @id(map: "PK_24dbc6126a28ff948da33e97d3b") @default(autoincrement())
   name     String     @db.VarChar
   image    String     @db.VarChar
-  products products[]
+  products product[]
 }
 
-model products {
+model product {
   id               Int        @id(map: "PK_0806c755e0aca124e67c0cf6d7d") @default(autoincrement())
   name             String     @db.VarChar
   shortDescription String     @db.VarChar
