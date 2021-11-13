@@ -3,4 +3,5 @@ node_modules
 /images/
 /dist/
 
+tsconfig.tsbuildinfo
 .env

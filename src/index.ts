@@ -42,7 +42,7 @@ app.register(fstatic, {
 });
 app.register(cookie, {secret: 'secret'} as FastifyCookieOptions);
 app.register(cors, {
-    origin: CLIENT_URL,
+    origin: [CLIENT_URL, 'http://localhost:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS', 'DELETE', 'PUT'],
     allowedHeaders: ['Origin', 'Content-Type', 'X-Auth-Token'],
